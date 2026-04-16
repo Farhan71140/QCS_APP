@@ -1,5 +1,10 @@
 .env
 .env.local
+.env.production
 node_modules/
 *.log
+npm-debug.log*
 .DS_Store
+Thumbs.db
+{middleware,routes,supabase}
+{
