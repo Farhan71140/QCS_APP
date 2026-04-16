@@ -1,5 +1,5 @@
 // ─── UTILITIES ───────────────────────────────────────────────
-const API = 'http://localhost:5000/api';
+const API = 'https://qcs-app.onrender.com/api';
 let token = '', currentUser = null, prevScreen = '';
 
 function toast(msg, dur = 3000) {
