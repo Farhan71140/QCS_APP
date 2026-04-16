@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1"/>
+<title>QM — WorkForce OS</title>
+<link rel="stylesheet" href="css/style.css"/>
+</head>
+<body>
+
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════════════════════════════
+     LOGIN SCREEN
+════════════════════════════════════ -->
+<div class="screen active" id="loginScreen">
+  <div class="login-card">
+    <div class="logo-wrap">
+
+      <!-- ✅ LOGO CHANGED: was <div class="logo-circle"><span>QM</span></div> -->
+      <div class="logo-circle" style="background:none;padding:0;box-shadow:none">
+        <img src="logo.png"
+             alt="QM Logo"
+             style="width:72px;height:72px;object-fit:contain;border-radius:18px"/>
+      </div>
+
+      <h1>WorkForce OS</h1>
+      <p>Sign in to your workspace</p>
+    </div>
+    <div style="margin-bottom:16px">
+      <p style="font-size:12px;font-weight:600;color:var(--text2);text-transform:uppercase;letter-spacing:0.5px;margin-bottom:8px">Quick Login As</p>
+      <div class="role-pills">
+        <div class="role-pill active" onclick="setRole('admin')">🛡️ Admin</div>
+        <div class="role-pill" onclick="setRole('supervisor')">👁️ Supervisor</div>
+        <div class="role-pill" onclick="setRole('teamleader')">🏆 Team Leader</div>
+        <div class="role-pill" onclick="setRole('participant')">👤 Worker</div>
+      </div>
+    </div>
+    <div class="inp-group">
+      <label>Email</label>
+      <input type="email" id="loginEmail" placeholder="admin@workforceos.com" value="admin@workforceos.com"/>
+    </div>
+    <div class="inp-group">
+      <label>Password</label>
+      <input type="password" id="loginPassword" placeholder="••••••••" value="Admin@123"/>
+    </div>
+    <button class="btn-primary" onclick="doLogin()">Sign In →</button>
+    <p style="text-align:center;font-size:12px;color:var(--text3);margin-top:16px">QM v2.0 • Secure Workforce Management</p>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════
+     ADMIN SCREEN
+════════════════════════════════════ -->
+<div class="screen" id="adminScreen">
+  <div class="topbar">
+    <div class="topbar-left">
+
+      <!-- ✅ LOGO CHANGED: was text "QM" inside a div -->
+      <div style="width:32px;height:32px;border-radius:10px;overflow:hidden;flex-shrink:0">
+        <img src="logo.png"
+             alt="QM"
+             style="width:100%;height:100%;object-fit:contain"/>
+      </div>
+
+      <div>
+        <div style="font-size:11px;color:var(--text3);font-weight:500">Admin Panel</div>
+        <div style="font-size:15px;font-weight:700;color:var(--text)">Dashboard</div>
+      </div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <button class="icon-btn" onclick="exportCSV()">📥</button>
+      <button class="icon-btn" onclick="showAddUser()">➕</button>
+      <div class="avatar" onclick="showSettings()">A</div>
+    </div>
+  </div>
+  <div class="scroll-content" id="adminContent">
+    <div class="loading"><div><div class="spinner"></div>Loading dashboard...</div></div>
+  </div>
+  <nav class="bottom-nav" id="adminNav">
+    <div class="nav-item active" onclick="adminTab('dashboard',this)"><span class="nav-icon">🏠</span><span class="nav-label">Home</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="adminTab('users',this)"><span class="nav-icon">👥</span><span class="nav-label">Users</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="adminTab('attendance',this)"><span class="nav-icon">📅</span><span class="nav-label">Attendance</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="adminTab('payments',this)"><span class="nav-icon">💸</span><span class="nav-label">Payments</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="adminTab('fraud',this)"><span class="nav-icon">🚨</span><span class="nav-label">Fraud</span><div class="nav-dot"></div></div>
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════════
+     SUPERVISOR SCREEN
+════════════════════════════════════ -->
+<div class="screen" id="supervisorScreen">
+  <div class="topbar">
+    <div class="topbar-left">
+
+      <!-- ✅ LOGO CHANGED -->
+      <div style="width:32px;height:32px;border-radius:10px;overflow:hidden;flex-shrink:0">
+        <img src="logo.png"
+             alt="QM"
+             style="width:100%;height:100%;object-fit:contain"/>
+      </div>
+
+      <div>
+        <div style="font-size:11px;color:var(--text3);font-weight:500">Supervisor</div>
+        <div style="font-size:15px;font-weight:700;color:var(--text)">My Team</div>
+      </div>
+    </div>
+    <div class="avatar" style="background:linear-gradient(135deg,#3B82F6,#6C63FF)" onclick="showSettings()">S</div>
+  </div>
+  <div class="scroll-content" id="supervisorContent">
+    <div class="loading"><div><div class="spinner"></div>Loading...</div></div>
+  </div>
+  <nav class="bottom-nav">
+    <div class="nav-item active" onclick="supTab('dashboard',this)"><span class="nav-icon">🏠</span><span class="nav-label">Home</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="supTab('qc',this)"><span class="nav-icon">✅</span><span class="nav-label">QC Check</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="supTab('attendance',this)"><span class="nav-icon">📅</span><span class="nav-label">Attendance</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="supTab('production',this)"><span class="nav-icon">📋</span><span class="nav-label">Production</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="supTab('team',this)"><span class="nav-icon">👥</span><span class="nav-label">Team</span><div class="nav-dot"></div></div>
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════════
+     TEAM LEADER SCREEN
+════════════════════════════════════ -->
+<div class="screen" id="teamleaderScreen">
+  <div class="topbar">
+    <div class="topbar-left">
+
+      <!-- ✅ LOGO CHANGED -->
+      <div style="width:32px;height:32px;border-radius:10px;overflow:hidden;flex-shrink:0">
+        <img src="logo.png"
+             alt="QM"
+             style="width:100%;height:100%;object-fit:contain"/>
+      </div>
+
+      <div>
+        <div style="font-size:11px;color:var(--text3);font-weight:500">Team Leader</div>
+        <div style="font-size:15px;font-weight:700;color:var(--text)">Dashboard</div>
+      </div>
+    </div>
+    <div class="avatar" style="background:linear-gradient(135deg,#F59E0B,#EF4444)" onclick="showSettings()">TL</div>
+  </div>
+  <div class="scroll-content" id="teamleaderContent">
+    <div class="loading"><div><div class="spinner"></div>Loading...</div></div>
+  </div>
+  <nav class="bottom-nav">
+    <div class="nav-item active" onclick="tlTab('dashboard',this)"><span class="nav-icon">🏠</span><span class="nav-label">Home</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="tlTab('qc',this)"><span class="nav-icon">✅</span><span class="nav-label">QC Check</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="tlTab('attendance',this)"><span class="nav-icon">📅</span><span class="nav-label">Attendance</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="tlTab('production',this)"><span class="nav-icon">📋</span><span class="nav-label">Production</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="tlTab('team',this)"><span class="nav-icon">👥</span><span class="nav-label">Sub-Team</span><div class="nav-dot"></div></div>
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════════
+     PARTICIPANT SCREEN
+════════════════════════════════════ -->
+<div class="screen" id="participantScreen">
+  <div class="topbar">
+    <div class="topbar-left">
+
+      <!-- ✅ LOGO CHANGED -->
+      <div style="width:32px;height:32px;border-radius:10px;overflow:hidden;flex-shrink:0">
+        <img src="logo.png"
+             alt="QM"
+             style="width:100%;height:100%;object-fit:contain"/>
+      </div>
+
+      <div>
+        <div style="font-size:11px;color:var(--text3);font-weight:500">Worker Portal</div>
+        <div style="font-size:15px;font-weight:700;color:var(--text)">My Dashboard</div>
+      </div>
+    </div>
+    <div class="avatar" style="background:linear-gradient(135deg,#10B981,#06B6D4)" onclick="showSettings()">W</div>
+  </div>
+  <div class="scroll-content" id="participantContent">
+    <div class="loading"><div><div class="spinner"></div>Loading...</div></div>
+  </div>
+  <nav class="bottom-nav">
+    <div class="nav-item active" onclick="partTab('dashboard',this)"><span class="nav-icon">🏠</span><span class="nav-label">Home</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="partTab('production',this)"><span class="nav-icon">📋</span><span class="nav-label">Production</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="partTab('qcresults',this)"><span class="nav-icon">✅</span><span class="nav-label">QC Results</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="partTab('payments',this)"><span class="nav-icon">💰</span><span class="nav-label">Payments</span><div class="nav-dot"></div></div>
+    <div class="nav-item" onclick="partTab('attendance',this)"><span class="nav-icon">📅</span><span class="nav-label">Attendance</span><div class="nav-dot"></div></div>
+  </nav>
+</div>
+
+<!-- ═══════════════════════════════════
+     SETTINGS SCREEN
+════════════════════════════════════ -->
+<div class="screen" id="settingsScreen">
+  <div class="topbar">
+    <div class="topbar-left">
+      <button class="icon-btn" onclick="goBack()">←</button>
+      <div style="font-size:16px;font-weight:700;color:var(--text)">Settings</div>
+    </div>
+  </div>
+  <div class="scroll-content" id="settingsContent"></div>
+</div>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" style="display:none" onclick="closeModal(event)">
+  <div class="modal-sheet" id="modalSheet">
+    <div class="modal-handle"></div>
+    <div id="modalContent"></div>
+  </div>
+</div>
+
+<!-- SCRIPTS: utils first, then role modules -->
+<script src="js/utils.js"></script>
+<script src="js/auth.js"></script>
+<script src="js/admin.js"></script>
+<script src="js/supervisor.js"></script>
+<script src="js/participant.js"></script>
+
+</body>
+</html>
