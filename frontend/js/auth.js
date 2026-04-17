@@ -1,8 +1,6 @@
 // ─── LOGIN / AUTH ─────────────────────────────────────────────
 
-// ✅ NEW: Restore session on page load / refresh
-// Checks localStorage for saved token and user
-// If found → skips login screen and goes straight to dashboard
+// ✅ Restore session on page load / refresh
 window.addEventListener('load', () => {
   const savedToken = localStorage.getItem('qm_token');
   const savedUser  = localStorage.getItem('qm_user');
@@ -12,7 +10,6 @@ window.addEventListener('load', () => {
       currentUser = JSON.parse(savedUser);
       routeToDashboard(currentUser.role);
     } catch (e) {
-      // If saved data is corrupted, clear it and show login
       localStorage.removeItem('qm_token');
       localStorage.removeItem('qm_user');
       showScreen('loginScreen');
@@ -20,14 +17,25 @@ window.addEventListener('load', () => {
   }
 });
 
-// ✅ CHANGED: removed hardcoded sample emails from setRole()
-// Now just highlights the selected role pill — no auto-fill
+// ✅ CHANGED: setRole() only highlights pill — no auto-fill of credentials
 function setRole(r) {
   document.querySelectorAll('.role-pill').forEach(p => p.classList.remove('active'));
   event.target.classList.add('active');
-  // Clear fields so user types their own real credentials
   document.getElementById('loginEmail').value    = '';
   document.getElementById('loginPassword').value = '';
+}
+
+// ✅ ADDED: show/hide password toggle
+function togglePassword() {
+  const input = document.getElementById('loginPassword');
+  const btn   = document.getElementById('pwToggleBtn');
+  if (input.type === 'password') {
+    input.type      = 'text';
+    btn.textContent = '🙈';
+  } else {
+    input.type      = 'password';
+    btn.textContent = '👁️';
+  }
 }
 
 async function doLogin() {
@@ -42,8 +50,7 @@ async function doLogin() {
       token       = data.token;
       currentUser = data.user;
 
-      // ✅ NEW: Save token and user to localStorage
-      // This keeps the user logged in after refresh
+      // ✅ Save token and user to localStorage
       localStorage.setItem('qm_token', data.token);
       localStorage.setItem('qm_user',  JSON.stringify(data.user));
 
@@ -72,8 +79,7 @@ function routeToDashboard(role) {
   else                             loadParticipantDashboard();
 }
 
-// ✅ CHANGED: logout now also clears localStorage
-// So after logout, refresh correctly shows login screen
+// ✅ logout clears localStorage
 function logout() {
   token       = '';
   currentUser = null;
@@ -135,7 +141,7 @@ async function updateProfile() {
   const phone = document.getElementById('st_phone').value;
   const data  = await apiFetch('/auth/updateprofile', 'PUT', { name, email, phone });
 
-  // ✅ NEW: update saved user in localStorage after profile change
+  // ✅ Update saved user in localStorage after profile change
   if (data) {
     currentUser = { ...currentUser, name, email, phone };
     localStorage.setItem('qm_user', JSON.stringify(currentUser));
